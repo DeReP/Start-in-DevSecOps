@@ -1,0 +1,66 @@
+{%extends 'mainapp/base.html'%}
+
+{%block content%}
+    <main class="main-content">
+        <div class="container">
+            <div class="mx-auto mx-width-1100">
+              <header>
+                <h1>{{title}}</h1>
+                </header>
+                <nav id='pagination'>
+                    <ul class='pagination'>
+                        {% for i in  object_list.paginator.page_range %}
+                                {% if object_list.number == i %}
+                                    <li class="page-item active"><a class="page-link" href="{{request.path}}?page={{i}}">{{ i }}</a></li>
+                                {% else %}
+                                    <li class="page-item"><a class="page-link" href="{{request.path}}?page={{i}}">{{ i }}</a></li>
+                                {% endif %}
+                        {% endfor%}         
+                    </ul>
+                    </nav>
+                    {% for i in  object_list%}
+                    <div id="mycontent" class="card mb-3 bg-light">
+                            <div class="card-text mx-auto">
+                                {% autoescape off %}{{ i.text }}{% endautoescape %}
+                                
+                            </div>
+                            {%if object_list.has_next %}
+                                <a class="btn btn-primary" id="next-btn" href="{{ request.path}}?page={{object_list.next_page_number}}" role="button">Далее</a>
+                            {%else %}
+                                <a class="btn btn-primary" href="/" role="button">На главную</a>
+                                {% if topic_id != 3 %}
+                                    <a class="btn btn-primary" href="/test/{{topic_id}}" role="button">Перейти к тесту</a>
+                                {%endif%}
+                            {% endif%}
+                    </div>
+                    {% endfor%} 
+            </div>
+            
+            </div>
+                
+            
+        </div>
+    </main>
+    
+    <script>
+       
+        
+            $(document).on('click', '#pagination a.page-link, #next-btn', function(e) {
+                    e.preventDefault()
+                    let pageUrl = $(this).attr('href')
+                    axios.get(pageUrl).then(response => {
+                        $('#pagination').empty()
+                        $('#pagination').append($(response.data).find('#pagination').html())
+                        $('#mycontent').empty()
+                        $('#mycontent').append($(response.data).find('#mycontent').html())
+                        $('html, body').animate({scrollTop: 0},500)
+                    }) 
+            })
+           
+
+    </script>
+{%endblock%}
+
+
+
+
