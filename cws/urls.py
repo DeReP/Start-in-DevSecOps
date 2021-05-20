@@ -23,7 +23,7 @@ from rest_framework import routers
 import rest_framework.urls
 from mainapp.views import Home, ContentCardViewSet, EducationListView
 from questionapp.views import QuestionViewSet,  question_page, TestListView
-from mainapp.api.views import CommentList, CommentDetail
+
 
 router =  routers.DefaultRouter()
 router.register(r'question/(?P<id>.+)', QuestionViewSet)
@@ -40,9 +40,7 @@ urlpatterns = [
     path('edu/<int:id>/', EducationListView.as_view(), name="Education"),
     path('test/', TestListView.as_view(), name='TestList'),
     path('test/<int:id>/', question_page, name='question_page'),
-    path('api-auth/', include('rest_framework.urls')),
-    path('comments/', CommentList.as_view()),
-    path('comments/<int:pk>/', CommentDetail.as_view()),
+    path('api-auth/', include('rest_framework.urls'))
  
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
   

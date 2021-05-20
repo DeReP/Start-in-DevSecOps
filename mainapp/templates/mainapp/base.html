@@ -13,13 +13,23 @@
             axios.defaults.xsrfHeaderName = "X-CSRFTOKEN";
             axios.defaults.xsrfCookieName = "csrftoken";
         </script>
+
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-80WS5PK09N"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-80WS5PK09N');
+        </script>
     </head>
 
     <body>
         <header>
             <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
                 <div class="container">
-                    <a class="navbar-brand" href="#">LOGO</a>
+                    <a class="navbar-brand" href="#">learnsec</a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
