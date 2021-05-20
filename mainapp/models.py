@@ -16,7 +16,7 @@ class Card(models.Model):
     title = models.CharField(max_length=256, verbose_name="Заголовок")
     text = models.CharField(max_length=512, verbose_name="Текст карточки")
     order = models.IntegerField(verbose_name="Порядковый номер карточки", default=1000)
-    topic = models.OneToOneField("Topic", on_delete=models.CASCADE, default=0)   
+    topic = models.OneToOneField("Topic", on_delete=models.CASCADE)   
 
     def __str__(self):
         return self.title
