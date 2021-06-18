@@ -27,10 +27,12 @@
                             {%if object_list.has_next %}
                                 <a class="btn btn-primary" id="next-btn" href="{{ request.path}}?page={{object_list.next_page_number}}" role="button">Далее</a>
                             {%else %}
-                                <a class="btn btn-primary" href="/" role="button">На главную</a>
-                                {% if topic_id != 3 %}
-                                    <a class="btn btn-primary" href="/test/{{topic_id}}" role="button">Перейти к тесту</a>
-                                {%endif%}
+                                <div class="mx-auto">
+                                    <a class="btn btn-primary" href="/" role="button">На главную</a>
+                                    {% if topic_id != 3 %}
+                                        <a class="btn btn-primary" href="/test/{{topic_id}}" role="button">Перейти к тесту</a>
+                                    {%endif%}
+                                </div>
                             {% endif%}
                     </div>
                     {% endfor%} 

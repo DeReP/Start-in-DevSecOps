@@ -122,7 +122,6 @@
 
         function showResult(score, count) {
             let percent = score / count * 100
-            console.log(percent)
             let template = `<div class='text-center'>Количество правильных ответов ${score} из ${count} !</div>`
             if (percent === 100) {
                 template += `<div class='text-center'>Отлично, вы полностью усвоили материал!</div>`
