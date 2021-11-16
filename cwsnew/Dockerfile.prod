@@ -1,0 +1,61 @@
+###########
+# BUILDER #
+###########
+
+
+FROM python:3.9.7-alpine as builder
+
+WORKDIR /usr/src/app
+
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONBUFFERED 1
+
+#install system dependencies
+RUN apk update && apk add postgresql-dev gcc python3-dev musl-dev zlib-dev jpeg-dev 
+
+RUN pip install --upgrade pip
+
+COPY . .
+#install projects libraries
+
+
+COPY requirments.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir ./wheels -r requirments.txt
+
+
+##############
+# PROD IMAGE #
+##############
+
+FROM python:3.9.7-alpine
+
+
+ENV HOME=/home/app
+ENV APP_HOME=$HOME/web
+
+
+RUN mkdir -p $HOME
+RUN mkdir $APP_HOME
+
+WORKDIR $APP_HOME
+
+RUN addgroup -S app && adduser -S user -G app
+
+
+RUN apk update && apk add libpq libjpeg-turbo
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirments.txt .
+
+RUN pip install --upgrade pip
+RUN pip install --no-cache /wheels/*
+
+COPY ./entrypoint.sh $APP_HOME
+
+COPY . $APP_HOME
+
+RUN chown -R user:app $APP_HOME
+
+USER user
+
+ENTRYPOINT [ "/home/app/web/entrypoint.sh" ]
+
