@@ -1,0 +1,24 @@
+# Python Django
+# Test a Django project on multiple versions of Python.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/python
+
+trigger:
+- master
+
+steps:
+# Prepare Analysis Configuration task
+- task: SonarQubePrepare@4
+  inputs:
+    SonarQube: 'devops sec proj sonar'
+    scannerMode: 'CLI'
+    configMode: 'manual'
+    cliProjectKey: '23e65614b0116c78b65448b932ef2c4c2fee9705'
+
+# Run Code Analysis task
+- task: SonarQubeAnalyze@4
+
+# Publish Quality Gate Result task
+- task: SonarQubePublish@4
+  inputs:
+    pollingTimeoutSec: '300'
