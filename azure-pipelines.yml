@@ -36,8 +36,8 @@ jobs:
       pip install -r requirements.txt  
     displayName: 'Install requirements'
   
-  -job: sonar-sec-test
-    steps:
+- job: sonar_sec_test
+  steps:
     # Prepare Analysis Configuration task
     - task: SonarQubePrepare@4
       inputs:
