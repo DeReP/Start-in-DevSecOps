@@ -37,6 +37,8 @@ jobs:
     displayName: 'Install requirements'
   
 - job: sonar_sec_test
+  pool:
+    name: DEVOPS-SEC-PROJ
   steps:
     # Prepare Analysis Configuration task
     - task: SonarQubePrepare@4
