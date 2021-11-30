@@ -33,7 +33,7 @@ jobs:
       python -m venv env
       source env/bin/activate
       python -m pip install --upgrade pip setuptools wheel
-      pip install -r requirements.txt  
+      pip install -r requirments.txt  
     displayName: 'Install requirements'
   
 - job: sonar_sec_test
