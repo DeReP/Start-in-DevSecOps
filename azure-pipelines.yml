@@ -37,6 +37,7 @@ jobs:
     displayName: 'Install requirements'
   
 - job: sonar_sec_test
+  dependsOn: build
   pool:
     name: DEVOPS-SEC-PROJ
   steps:
