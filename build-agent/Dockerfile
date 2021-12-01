@@ -15,7 +15,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     netcat \
     libssl1.0 \
     docker.io \
-    python-dev \ 
+    python3.9 \
+    python3.9-dev \
+    python3.9-venv \
+    openjdk-11-jre \
   && rm -rf /var/lib/apt/lists/*
 
 
@@ -25,7 +28,7 @@ ARG AGENT_VERSION=2.194.0
 WORKDIR /azp
 
 ARG AZP_AGENTPACKAGE_URL=https://vstsagentpackage.azureedge.net/agent/${AGENT_VERSION}/vsts-agent-linux-x64-${AGENT_VERSION}.tar.gz
-RUN curl -LsS "$AZP_AGENTPACKAGE_URL" | tar -xzv
+RUN curl -LsS "$AZP_AGENTPACKAGE_URL" | tar -xz
 
 COPY ./start.sh .
 RUN chmod +x start.sh
