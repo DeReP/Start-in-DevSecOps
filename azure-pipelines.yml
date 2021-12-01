@@ -9,9 +9,9 @@ jobs:
   
   steps:
   - task: UsePythonVersion@0
-      inputs:
-        versionSpec: 3.9
-        architecture: 'x64'
+    inputs:
+      versionSpec: 3.9
+      architecture: 'x64'
 
   - task: PythonScript@0
     displayName: 'Export project path'
@@ -33,11 +33,14 @@ jobs:
       python -m venv env
       source env/bin/activate
       python -m pip install --upgrade pip setuptools wheel
-      pip install -r requirements.txt  
+      pip install -r requirments.txt  
     displayName: 'Install requirements'
   
-  -job: sonar-sec-test
-    steps:
+- job: sonar_sec_test
+  dependsOn: build
+  pool:
+    name: DEVOPS-SEC-PROJ
+  steps:
     # Prepare Analysis Configuration task
     - task: SonarQubePrepare@4
       inputs:
