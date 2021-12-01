@@ -18,10 +18,11 @@ fi
 
 unset AZP_TOKEN
 
-if [ -n "$AZP_WORK" ]; then
-  mkdir -p "$AZP_WORK"
-fi
-
+TOOL_DIR="$AZP_WORK"/_tool
+mkdir -p "$TOOL_DIR"/Python/3.9.5
+python3.9 -m venv "$TOOL_DIR"/Python/3.9.5/x64
+touch "$TOOL_DIR"/Python/3.9.5/x64.complete
+ln -s "$TOOL_DIR"/Python/3.9.5 "$TOOL_DIR"/Python/3.9 
 
 export AGENT_ALLOW_RUNASROOT="1"
 cleanup() {
