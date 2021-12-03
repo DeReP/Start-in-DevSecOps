@@ -56,3 +56,8 @@ jobs:
     - task: SonarQubePublish@4
       inputs:
         pollingTimeoutSec: '300'
+    
+    # break the build if quality gate failed
+    - task: sonar-buildbreaker@8
+      inputs:
+        SonarQube: 'devops sec proj sonar'
