@@ -61,3 +61,18 @@ jobs:
     - task: sonar-buildbreaker@8
       inputs:
         SonarQube: 'devops sec proj sonar'
+
+
+- job: build_docker_image
+  variables:
+    imageName: 'cws-prod'
+    dockerfile_path: 'cwsnew/Dockerfile.prod' #is hardcode path appropriate?
+  pool:
+    name: DEVOPS-SEC-PROJ
+  steps:
+  - task: Docker@2
+    displayName: Build an image
+    inputs:
+      repository: $(imageName)
+      command: build
+      Dockerfile: $(dockerfile_path)
