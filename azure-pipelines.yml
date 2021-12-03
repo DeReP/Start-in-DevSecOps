@@ -63,16 +63,18 @@ jobs:
         SonarQube: 'devops sec proj sonar'
 
 
-- job: build_docker_image
-  variables:
-    imageName: 'cws-prod'
-    dockerfile_path: 'cwsnew/Dockerfile.prod' #is hardcode path appropriate?
+- job: build_and_push_docker_image
   pool:
     name: DEVOPS-SEC-PROJ
-  steps:
+  steps: 
   - task: Docker@2
-    displayName: Build an image
     inputs:
-      repository: $(imageName)
-      command: build
-      Dockerfile: $(dockerfile_path)
+      containerRegistry: 'devops sec proj harbor'
+      repository: 'cws'
+      command: 'buildAndPush'
+      Dockerfile: 'cwsnew/Dockerfile.prod' #is hardcode path appropriate?
+      tags: 'cws$(Build.BuildId)' 
+
+
+
+  
