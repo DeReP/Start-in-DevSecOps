@@ -73,7 +73,7 @@ jobs:
       repository: 'cws'
       command: 'buildAndPush'
       Dockerfile: 'cwsnew/Dockerfile.prod' #is hardcode path appropriate?
-      tags: 'cws$(Build.BuildId)' 
+      tags: '$(Build.BuildId)' 
 
 
 
