@@ -40,7 +40,7 @@ services:
       - _REDIS_URL_REG=redis://redis:6379/1
       - PORT=8080
       - LOG_LEVEL=info
-      - EXT_ENDPOINT=http://reg.mydomain.com
+      - EXT_ENDPOINT=http://10.1.1.170
       - DATABASE_TYPE=postgresql
       - REGISTRY_CONTROLLER_URL=http://registryctl:8080
       - POSTGRESQL_HOST=postgresql
@@ -124,6 +124,13 @@ services:
       - chartmuseum_data:/bitnami/data
   harbor-adapter-trivy:
     image: docker.io/bitnami/harbor-adapter-trivy:2
+    environment:
+     - SCANNER_LOG_LEVEL=trace
+     - SCANNER_TRIVY_DEBUG_MODE=true 
+     - SCANNER_TRIVY_INSECURE=true 
+     - SCANNER_API_SERVER_READ_TIMEOUT=60s
+     - SCANNER_API_SERVER_WRITE_TIMEOUT=60s
+     - SCANNER_REDIS_URL=redis://redis:6379/1  
     expose:
       - '8080'
     volumes:
