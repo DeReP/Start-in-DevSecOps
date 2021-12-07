@@ -19,6 +19,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.9-dev \
     python3.9-venv \
     openjdk-11-jre \
+    nodejs \
+    npm \
   && rm -rf /var/lib/apt/lists/*
 
 
