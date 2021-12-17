@@ -9,11 +9,12 @@ from rest_framework.response import Response
 from questionapp.serializers import QuestionSerializer
 from django.http import HttpResponse, JsonResponse
 import json
+from django.views.decorators.http import require_http_methods
 
 from questionapp.models import Answer, QuestionCard
 from mainapp.models import Topic
 
-
+@require_http_methods(["GET"])
 def question_page(request, id):
     template = 'questionapp/question.html'
     context = {}
@@ -52,7 +53,7 @@ class QuestionViewSet(viewsets.ModelViewSet):
 class QuestionPaginator(PageNumberPagination):
     page_size = 1
 
-
+@require_http_methods(["GET", "POST"])
 def answer(request):
     if request.method == "POST":
         
