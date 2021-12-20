@@ -12,7 +12,7 @@ jobs:
         SonarQube: 'devops sec proj sonar'
         scannerMode: 'CLI'
         configMode: 'manual'
-        cliProjectKey: 'DevOps-security-project-acceptable:acceptable'
+        cliProjectKey: 'Automation_DevOps_security_project'
 
     # Run Code Analysis task
     - task: SonarQubeAnalyze@4
