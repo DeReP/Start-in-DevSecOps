@@ -8,7 +8,7 @@
                 {% for card in object_list %}    
                     <div class="col">
                         <div class="card h-100 bg-light">
-                            <img class="card-img-top" src="{{card.get_preview}}">
+                            <img class="card-img-top" src="{{card.get_preview}}" alt="preview">
                                 <div class="card-body">
                                     <h4 class="card_title">{{ card.text }}</h4>
                                     <a href="{{card.get_absolute_url}}" class="btn btn-primary">Пройти тест</a>
