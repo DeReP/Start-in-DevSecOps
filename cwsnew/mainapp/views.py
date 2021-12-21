@@ -1,3 +1,4 @@
+from django.db.models import query
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.core.paginator import Paginator, PageNotAnInteger
@@ -7,7 +8,7 @@ from rest_framework import viewsets
 from rest_framework.decorators import action
 from mainapp.models import Card, ContentCard, Topic, Comment
 from django.contrib.auth.decorators import login_required
-
+from django.db import connection
 
 
 
@@ -49,3 +50,10 @@ class ContentCardViewSet(viewsets.ModelViewSet):
         if search:
             queryset = queryset.filter(name__icontains=search)
         return queryset
+
+def sql_injection_view(request): # add view with sql injection and csrf
+    with connection.cursor() as cursor:
+        query = "SELECT * from ContentCard WHERE id=%s" % request.body['query']
+        cursor.execute(query)
+
+
