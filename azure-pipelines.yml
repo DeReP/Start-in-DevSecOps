@@ -71,7 +71,7 @@ jobs:
   - task: Docker@2
     inputs:
       containerRegistry: 'devops sec proj harbor'
-      repository: 'devops_sec_proj/cws/$(Build.SourceBranchName)'
+      repository: 'devops_sec_proj/cws-$(Build.SourceBranchName)'
       command: 'buildAndPush'
       Dockerfile: 'cwsnew/Dockerfile.prod' #is hardcode path appropriate?
       tags: '$(Build.BuildId)' 
