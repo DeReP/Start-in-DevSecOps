@@ -29,7 +29,7 @@ dotenv_path = BASE_DIR/'../.env.dev'
 if os.path.exists(dotenv_path):
     load_dotenv(dotenv_path)
 
-SECRET_KEY = os.environ.get("SECRET_KEY")
+SECRET_KEY = 'kjsadhkjashdkkjcbbxckjchkjjjjjj' # add hardcode secret vuln
 CSRF_COOKIE_NAME = "csrftoken"
 
 
@@ -38,7 +38,7 @@ DEBUG = int(os.environ.get("DEBUG", default=0))
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS")
 
-
+CORS_ORIGIN_ALLOW_ALL = True # add CORS Vulnerability
 # Application definition
 
 INSTALLED_APPS = [ 
@@ -60,7 +60,7 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+   # 'django.middleware.csrf.CsrfViewMiddleware', #disable scrf
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -94,8 +94,8 @@ DATABASES = {
     'default': {
         'ENGINE': os.environ.get("SQL_ENGINE"),
         'NAME': os.environ.get("SQL_DATABASE"),
-        'USER': os.environ.get("SQL_USER"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD"),
+        'USER': 'den4e9',
+        "PASSWORD": 'den4e9', #  add hardcode secret vuln
         "HOST": os.environ.get("SQL_HOST"),
         "PORT": os.environ.get("SQL_PORT")
     }
@@ -144,7 +144,7 @@ REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 1,
     'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticatedOrReadOnly',
+       # 'rest_framework.permissions.IsAuthenticatedOrReadOnly', # add permission vulnerability to rest api
     ]
 }
 

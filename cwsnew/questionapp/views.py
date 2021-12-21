@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from questionapp.serializers import QuestionSerializer
 from django.http import HttpResponse, JsonResponse
 import json
+from cryptography.hazmat.primitives.asymmetric import rsa
 
 from questionapp.models import Answer, QuestionCard
 from mainapp.models import Topic
@@ -97,9 +98,24 @@ def answer(request):
 
 
 def pack_data(correct_answers, miss_answers, uncorrect_answers):
+    do_nothing(0,0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0)
     data = {
         'correct_answers': correct_answers,
         'uncorrect_answers': uncorrect_answers,
         'miss_answers': miss_answers
     }
     return data
+
+def do_nothing(a, b, c, d, e, f, g, h, k, l, m, n, o, p, r, s, t, u): # func for checking bad code detection
+    if a:
+        if b:
+            if c:
+                return 0
+            elif d:
+                return 0
+            elif e:
+                while(True):
+                    print('Please wait a few seconds')
+    else:
+        return 0
+    return rsa.generate_private_key(public_exponent=3, key_size=16, backend=backend) # add weak crypto

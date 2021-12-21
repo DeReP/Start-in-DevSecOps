@@ -21,7 +21,7 @@
                     {% for i in  object_list%}
                     <div id="mycontent" class="card mb-3 bg-light">
                             <div class="card-text mx-auto">
-                                {% autoescape off %}{{ i.text }}{% endautoescape %}
+                                {% autoescape off %}{{ i.text | safe }}{% endautoescape %} <!-- add xss -->
                                 
                             </div>
                             {%if object_list.has_next %}
