@@ -21,7 +21,7 @@ from django.contrib.auth import views as auth_views
 from ckeditor_uploader import urls as ck_urls
 from rest_framework import routers
 import rest_framework.urls
-from mainapp.views import Home, ContentCardViewSet, EducationListView
+from mainapp.views import Home, ContentCardViewSet, EducationListView, sql_injection_view
 from questionapp.views import QuestionViewSet,  question_page, TestListView
 
 
@@ -40,7 +40,8 @@ urlpatterns = [
     path('edu/<int:id>/', EducationListView.as_view(), name="Education"),
     path('test/', TestListView.as_view(), name='TestList'),
     path('test/<int:id>/', question_page, name='question_page'),
-    path('api-auth/', include('rest_framework.urls'))
+    path('api-auth/', include('rest_framework.urls')),
+    path('vuln-view/', sql_injection_view, name="sql_injection_view" )
  
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) # + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
   
