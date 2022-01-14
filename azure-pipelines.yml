@@ -87,13 +87,20 @@ jobs:
     displayName: 'Run Trivy scan'
     inputs:
       script: |
-        docker run -v '/var/run/docker.sock:/var/run/docker.sock' bitnami/trivy:latest image --format template --template "@templates/junit.tpl" -o junit-report.xml $(ImageName):$(tag)
+        docker run  \
+          -v '/var/run/docker.sock:/var/run/docker.sock' \
+          -v "$(pwd):/src" \
+          bitnami/trivy:latest image \
+          --format template \
+          --template "@templates/junit.tpl" \
+          -o /src/junit-report.xml \
+          $(ImageName):$(tag)
   
   - task: PublishTestResults@2
     displayName: 'Publish scan results'
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: 'junit-report.xml' 
+      testResultsFiles: '**/junit-report.xml' 
       mergeTestResults: true
       failTaskOnFailedTests: true
       testRunTitle: 'Trivy scan result'
@@ -110,9 +117,3 @@ jobs:
       repository: '$(ImageName)'
       command: 'push'
       tags: '$(tag)'
-
-  
-
-
-
-  
