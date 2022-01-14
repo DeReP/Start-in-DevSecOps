@@ -1,10 +1,12 @@
 trigger:
-- master
-- acceptable
-- vulnerable
+- master-alt
+
+variables:
+  ImageName: 'devops_sec_proj/cws-$(Build.SourceBranchName)'
+  tag: '$(Build.BuildId)'
 
 jobs:
-- job: sonar_sec_test
+- job: Sonar_sec_test
   pool:
     name: DEVOPS-SEC-PROJ
   steps:
@@ -29,8 +31,8 @@ jobs:
       inputs:
         SonarQube: 'devops sec proj sonar'
 
-- job: build
-  dependsOn: sonar_sec_test
+- job: Build
+  dependsOn: Sonar_sec_test
   pool:
     name: DEVOPS-SEC-PROJ
   
@@ -63,18 +65,53 @@ jobs:
       pip install -r requirments.txt  
     displayName: 'Install requirements'
 
-- job: build_and_push_docker_image
-  dependsOn: sonar_sec_test
+- job: Build_image
+  dependsOn: Sonar_sec_test
   pool:
     name: DEVOPS-SEC-PROJ
   steps: 
   - task: Docker@2
     inputs:
       containerRegistry: 'devops sec proj harbor'
-      repository: 'devops_sec_proj/cws-$(Build.SourceBranchName)'
-      command: 'buildAndPush'
+      repository: '$(ImageName)'
+      command: 'build'
       Dockerfile: 'cwsnew/Dockerfile.prod' #is hardcode path appropriate?
-      tags: '$(Build.BuildId)' 
+      tags: '$(tag)'
+
+- job: Trivy_scan
+  dependsOn: Build_image
+  pool:
+    name: DEVOPS-SEC-PROJ
+  steps:
+  - task: CmdLine@2
+    displayName: 'Run Trivy scan'
+    inputs:
+      script: |
+        docker run -v '/var/run/docker.sock:/var/run/docker.sock' bitnami/trivy:latest image --format template --template "@templates/junit.tpl" -o junit-report.xml $(ImageName):$(tag)
+  
+  - task: PublishTestResults@2
+    displayName: 'Publish scan results'
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: 'junit-report.xml' 
+      mergeTestResults: true
+      failTaskOnFailedTests: true
+      testRunTitle: 'Trivy scan result'
+    condition: 'always()'
+
+  - job: push_image_to_registry
+    dependsOn: Trivy_scan
+    pool:
+      name: DEVOPS-SEC-PROJ
+    steps:
+    - task: Docker@2
+      inputs:
+        containerRegistry: 'devops sec proj harbor'
+        repository: '$(ImageName)'
+        command: 'push'
+        tags: '$(tag)'
+
+  
 
 
 
