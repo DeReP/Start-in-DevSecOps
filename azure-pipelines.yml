@@ -99,17 +99,17 @@ jobs:
       testRunTitle: 'Trivy scan result'
     condition: 'always()'
 
-  - job: push_image_to_registry
-    dependsOn: Trivy_scan
-    pool:
-      name: DEVOPS-SEC-PROJ
-    steps:
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'devops sec proj harbor'
-        repository: '$(ImageName)'
-        command: 'push'
-        tags: '$(tag)'
+- job: push_image_to_registry
+  dependsOn: Trivy_scan
+  pool:
+    name: DEVOPS-SEC-PROJ
+  steps:
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'devops sec proj harbor'
+      repository: '$(ImageName)'
+      command: 'push'
+      tags: '$(tag)'
 
   
 
