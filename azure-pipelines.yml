@@ -87,13 +87,14 @@ jobs:
     displayName: 'Run Trivy scan'
     inputs:
       script: |
-        docker run  \
+        docker run -rm \
           -v '/var/run/docker.sock:/var/run/docker.sock' \
           -v "$(pwd):/src" \
+          -v "/tmp/trivy:/.cache/trivy"
           bitnami/trivy:latest image \
           --format template \
-          --template "@templates/junit.tpl" \
-          -o /src/junit-report.xml \
+          --template "@src/templates/junit.tpl" \
+          --output /src/junit-report.xml \
           $(ImageName):$(tag)
   
   - task: PublishTestResults@2
