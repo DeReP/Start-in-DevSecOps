@@ -94,14 +94,14 @@ jobs:
           bitnami/trivy:latest image \
           --format template \
           --template "@src/templates/junit.tpl" \
-          --output "/src/junit-report.xml" \
+          --output "/.cache/trivy/junit-report.xml" \
           $(ImageName):$(tag)
   
   - task: PublishTestResults@2
     displayName: 'Publish scan results'
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: '**/junit-report.xml' 
+      testResultsFiles: '/tmp/trivy/junit-report.xml' 
       mergeTestResults: true
       failTaskOnFailedTests: true
       testRunTitle: 'Trivy scan result'
