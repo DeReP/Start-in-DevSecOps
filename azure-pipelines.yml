@@ -83,9 +83,10 @@ jobs:
   pool:
     name: DEVOPS-SEC-PROJ
   steps:
-  - task: CmdLine@2
+  - task: Bash@3
     displayName: 'Run Trivy scan'
     inputs:
+      targetType: 'inline'
       script: |
         docker run --rm \
           -v '/var/run/docker.sock:/var/run/docker.sock' \
