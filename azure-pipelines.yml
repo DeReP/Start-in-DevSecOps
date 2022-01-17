@@ -90,7 +90,7 @@ jobs:
         docker run --rm \
           -v '/var/run/docker.sock:/var/run/docker.sock' \
           -v "$(pwd):/src" \
-          -v "/tmp/trivy:/.cache/trivy"
+          -v "/tmp/trivy:/.cache/trivy" \
           bitnami/trivy:latest image \
           --format template \
           --template "@src/templates/junit.tpl" \
