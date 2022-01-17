@@ -94,7 +94,7 @@ jobs:
           bitnami/trivy:latest image \
           --format template \
           --template "@src/templates/junit.tpl" \
-          --output "/.cache/trivy/junit-report.xml" \
+          --output '/.cache/trivy/junit-report.xml' \
           $(ImageName):$(tag)
   
   - task: PublishTestResults@2
