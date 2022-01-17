@@ -87,7 +87,7 @@ jobs:
     displayName: 'Run Trivy scan'
     inputs:
       script: |
-        docker run -rm \
+        docker run --rm \
           -v '/var/run/docker.sock:/var/run/docker.sock' \
           -v "$(pwd):/src" \
           -v "/tmp/trivy:/.cache/trivy"
