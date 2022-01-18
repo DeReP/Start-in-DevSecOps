@@ -74,11 +74,9 @@ jobs:
   steps: 
   - task: Docker@2
     inputs:
-      containerRegistry: 'devops sec proj harbor'
-      repository: '$(ImageName)'
       command: 'build'
       Dockerfile: 'cwsnew/Dockerfile.prod' #is hardcode path appropriate?
-      tags: '$(tag)'
+      arguments: '-t $(ImageName):$(tag)'
 
 - job: Trivy_scan
   dependsOn: Build_image
