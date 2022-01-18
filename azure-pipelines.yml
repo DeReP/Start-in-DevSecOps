@@ -4,6 +4,8 @@ trigger:
 variables:
   ImageName: 'devops_sec_proj/cws-$(Build.SourceBranchName)'
   tag: '$(Build.BuildId)'
+  trivy_server: 'http//10.1.1.170:1000'
+  trivy_token: 'pass123'
 
 jobs:
 - job: Sonar_sec_test
@@ -88,21 +90,18 @@ jobs:
     inputs:
       targetType: 'inline'
       script: |
-        docker run --rm \
-          -v '/var/run/docker.sock:/var/run/docker.sock' \
-          -v "$(pwd):/src" \
-          -v "/tmp/trivy:/.cache/trivy" \
-          bitnami/trivy:latest image \
+        trivy client --remote $(trivy_server) \
+          --token $(trivy_token) \
           --format template \
-          --template "@src/templates/junit.tpl" \
-          --output '/tmp/junit-report.xml' \
+          --template "@templates/junit.tpl" \
+          --output 'junit-report.xml' \
           $(ImageName):$(tag)
   
   - task: PublishTestResults@2
     displayName: 'Publish scan results'
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: '/tmp/trivy/junit-report.xml' 
+      testResultsFiles: '**/junit-report.xml' 
       mergeTestResults: true
       failTaskOnFailedTests: true
       testRunTitle: 'Trivy scan result'
