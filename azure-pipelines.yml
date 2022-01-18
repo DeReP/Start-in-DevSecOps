@@ -4,7 +4,7 @@ trigger:
 variables:
   ImageName: 'devops_sec_proj/cws-$(Build.SourceBranchName)'
   tag: '$(Build.BuildId)'
-  trivy_server: 'http//10.1.1.170:1000'
+  trivy_server: 'http://10.1.1.170:1000'
   trivy_token: 'pass123'
 
 jobs:
