@@ -4,6 +4,8 @@ trigger:
 variables:
   ImageName: 'devops_sec_proj/cws-$(Build.SourceBranchName)'
   tag: '$(Build.BuildId)'
+  trivy_server: 'http://10.1.1.170:1000'
+  trivy_token: 'pass123'
 
 jobs:
 - job: Sonar_sec_test
@@ -72,47 +74,45 @@ jobs:
   steps: 
   - task: Docker@2
     inputs:
-      containerRegistry: 'devops sec proj harbor'
-      repository: '$(ImageName)'
       command: 'build'
       Dockerfile: 'cwsnew/Dockerfile.prod' #is hardcode path appropriate?
-      tags: '$(tag)'
+      arguments: '-t $(ImageName):$(tag)'
 
 - job: Trivy_scan
   dependsOn: Build_image
   pool:
     name: DEVOPS-SEC-PROJ
   steps:
-  - task: CmdLine@2
+  - task: Bash@3
     displayName: 'Run Trivy scan'
     inputs:
+      targetType: 'inline'
       script: |
-        docker run -v '/var/run/docker.sock:/var/run/docker.sock' bitnami/trivy:latest image --format template --template "@templates/junit.tpl" -o junit-report.xml $(ImageName):$(tag)
+        trivy client --remote $(trivy_server) \
+          --token $(trivy_token) \
+          --format template \
+          --template "@templates/junit.tpl" \
+          --output 'junit-report.xml' \
+          $(ImageName):$(tag)
   
   - task: PublishTestResults@2
     displayName: 'Publish scan results'
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: 'junit-report.xml' 
+      testResultsFiles: '**/junit-report.xml' 
       mergeTestResults: true
       failTaskOnFailedTests: true
       testRunTitle: 'Trivy scan result'
     condition: 'always()'
 
-  - job: push_image_to_registry
-    dependsOn: Trivy_scan
-    pool:
-      name: DEVOPS-SEC-PROJ
-    steps:
-    - task: Docker@2
-      inputs:
-        containerRegistry: 'devops sec proj harbor'
-        repository: '$(ImageName)'
-        command: 'push'
-        tags: '$(tag)'
-
-  
-
-
-
-  
+- job: push_image_to_registry
+  dependsOn: Trivy_scan
+  pool:
+    name: DEVOPS-SEC-PROJ
+  steps:
+  - task: Docker@2
+    inputs:
+      containerRegistry: 'devops sec proj harbor'
+      repository: '$(ImageName)'
+      command: 'push'
+      tags: '$(tag)'
