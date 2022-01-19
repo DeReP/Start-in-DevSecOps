@@ -21,8 +21,14 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     openjdk-11-jre \
     nodejs \
     npm \
+    apt-transport-https \ 
+    gnupg \ 
+    lsb-release \
   && rm -rf /var/lib/apt/lists/*
 
+RUN curl -o - https://aquasecurity.github.io/trivy-repo/deb/public.key | apt-key add - && \
+    echo deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | tee -a /etc/apt/sources.list.d/trivy.list && \
+    apt-get update && apt-get install trivy
 
 
 ARG AGENT_VERSION=2.194.0
