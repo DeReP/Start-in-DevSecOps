@@ -3,7 +3,7 @@
 ###########
 
 
-FROM python:3.9.7-alpine as builder
+FROM python:3.10.2-alpine as builder
 
 WORKDIR /usr/src/app
 
@@ -27,7 +27,7 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir ./wheels -r requirments.txt
 # PROD IMAGE #
 ##############
 
-FROM python:3.9.7-alpine
+FROM python:3.10.2-alpine
 
 
 ENV HOME=/home/app

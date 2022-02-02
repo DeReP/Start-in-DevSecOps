@@ -1,12 +1,12 @@
 asgiref==3.3.1
 autopep8==1.5.6
-Django==3.1.7
+Django==3.1.13
 django-admin-thumbnails==0.2.5
 django-ckeditor==6.0.0
 django-js-asset==1.2.2
 djangorestframework==3.12.4
 easy-thumbnails==2.7.1
-Pillow
+Pillow==9.0.0
 psycopg2-binary
 gunicorn
 pycodestyle==2.7.0
