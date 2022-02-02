@@ -84,25 +84,49 @@ jobs:
     name: DEVOPS-SEC-PROJ
   steps:
   - task: Bash@3
-    displayName: 'Run Trivy scan'
+    displayName: 'Run Trivy scan (search for low, med, high)'
     inputs:
       targetType: 'inline'
       script: |
         trivy client --remote $(trivy_server) \
           --token $(trivy_token) \
+          --severity LOW,MEDIUM,HIGH \
           --format template \
           --template "@templates/junit.tpl" \
-          --output 'junit-report.xml' \
+          --output 'junit-report-low-med-high.xml' \
+          $(ImageName):$(tag)
+
+  - task: Bash@3
+    displayName: 'Run Trivy scan (search for crit)'
+    inputs:
+      targetType: 'inline'
+      script: |
+        trivy client --remote $(trivy_server) \
+          --token $(trivy_token) \
+          --severity CRITICAL \
+          --format template \
+          --template "@templates/junit.tpl" \
+          --output 'junit-report-crit.xml' \
           $(ImageName):$(tag)
   
   - task: PublishTestResults@2
-    displayName: 'Publish scan results'
+    displayName: 'Publish scan results with low, medium, high vulnerabilities'
     inputs:
       testResultsFormat: 'JUnit'
-      testResultsFiles: '**/junit-report.xml' 
+      testResultsFiles: '**/junit-report-low-med-high.xml' 
+      mergeTestResults: true
+      failTaskOnFailedTests: false
+      testRunTitle: 'Trivy scan result - low, medium and high vulnerabilities'
+    condition: 'always()'
+
+  - task: PublishTestResults@2
+    displayName: 'Publish scan results with critical vulnerabilities'
+    inputs:
+      testResultsFormat: 'JUnit'
+      testResultsFiles: '**/junit-report-crit.xml' 
       mergeTestResults: true
       failTaskOnFailedTests: true
-      testRunTitle: 'Trivy scan result'
+      testRunTitle: 'Trivy scan result - critical vulnerabilities'
     condition: 'always()'
 
 - job: push_image_to_registry
