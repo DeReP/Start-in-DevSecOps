@@ -1,5 +1,7 @@
 trigger:
+- master
 - master-alt
+- master-alt-safe
 
 variables:
   ImageName: 'devops_sec_proj/cws-$(Build.SourceBranchName)'
