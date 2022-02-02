@@ -8,6 +8,7 @@ variables:
   tag: '$(Build.BuildId)'
   trivy_server: 'http://10.1.1.170:1000'
   trivy_token: 'pass123'
+  registry_url: '10.1.1.170'
 
 jobs:
 - job: Sonar_sec_test
@@ -78,7 +79,9 @@ jobs:
     inputs:
       command: 'build'
       Dockerfile: 'cwsnew/Dockerfile.prod' #is hardcode path appropriate?
-      arguments: '-t $(ImageName):$(tag)'
+      containerRegistry: 'devops sec proj harbor'
+      repository: '$(ImageName)'
+      tags: '$(tag)'
 
 - job: Trivy_scan
   dependsOn: Build_image
@@ -96,7 +99,7 @@ jobs:
           --format template \
           --template "@templates/junit.tpl" \
           --output 'junit-report-low-med-high.xml' \
-          $(ImageName):$(tag)
+          $(registry_url)/$(ImageName):$(tag)
 
   - task: Bash@3
     displayName: 'Run Trivy scan (search for crit)'
@@ -109,7 +112,7 @@ jobs:
           --format template \
           --template "@templates/junit.tpl" \
           --output 'junit-report-crit.xml' \
-          $(ImageName):$(tag)
+          $(registry_url)/$(ImageName):$(tag)
   
   - task: PublishTestResults@2
     displayName: 'Publish scan results with low, medium, high vulnerabilities'
