@@ -4,12 +4,7 @@ trigger:
 - master-alt-safe
 
 variables:
-  ImageName: 'devops_sec_proj/cws-$(Build.SourceBranchName)'
-  tag: '$(Build.BuildId)'
-  trivy_server: 'http://10.1.1.170:1000'
-  trivy_token: 'pass123'
-  registry_url: '10.1.1.170'
-
+  - group: 'DevOps security proj'
 jobs:
 - job: Sonar_sec_test
   pool:
